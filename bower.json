@@ -1,0 +1,14 @@
+{
+  "name": "rocketeer.charts",
+  "version": "0.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3.chart": "rubenv/d3.chart#16167556ad19a60a77b0d6953ae7f13b8cad014f"
+  }
+}
