@@ -25,13 +25,7 @@ d3.chart('RtBaseChart').extend('RtBarChart', {
       },
       events: {
         merge: function() {
-          return this.attr('x', function(d, i) {
-            return chart.categories(i);
-          }).attr('y', function(d) {
-            return chart.bars(d.value);
-          }).attr('height', function(d) {
-            return chart.h - chart.bars(d.value);
-          }).attr('width', chart.categories.rangeBand());
+          return chart.updateBar(this);
         }
       }
     });
@@ -53,6 +47,16 @@ d3.chart('RtBaseChart').extend('RtBarChart', {
   },
   categoriesLength: function() {
     return this.w;
+  },
+  updateBar: function(bar) {
+    var _this = this;
+    return bar.attr('x', function(d, i) {
+      return _this.categories(i);
+    }).attr('y', function(d) {
+      return _this.bars(d.value);
+    }).attr('height', function(d) {
+      return _this.h - _this.bars(d.value);
+    }).attr('width', this.categories.rangeBand());
   }
 });
 
@@ -60,19 +64,20 @@ d3.chart('RtBarChart').extend('RtHorizontalBarChart', {
   initialize: function() {
     var chart;
     chart = this;
-    this.base.classed('rt-horizontal-bar-chart', true);
-    return this.layer('bars').on('merge', function() {
-      return this.attr('x', 0).attr('y', function(d, i) {
-        return chart.categories(i);
-      }).attr('height', chart.categories.rangeBand()).attr('width', function(d) {
-        return chart.w - chart.bars(d.value);
-      });
-    });
+    return this.base.classed('rt-horizontal-bar-chart', true);
   },
   barLength: function() {
     return this.w;
   },
   categoriesLength: function() {
     return this.h;
+  },
+  updateBar: function(bar) {
+    var _this = this;
+    return bar.attr('x', 0).attr('y', function(d, i) {
+      return _this.categories(i);
+    }).attr('height', this.categories.rangeBand()).attr('width', function(d) {
+      return _this.w - _this.bars(d.value);
+    });
   }
 });

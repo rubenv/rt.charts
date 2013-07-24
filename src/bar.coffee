@@ -25,11 +25,7 @@ d3.chart('RtBaseChart').extend 'RtBarChart',
                     .attr('class', 'bar')
 
             events:
-                merge: () ->
-                    @attr('x', (d, i) -> chart.categories(i))
-                    .attr('y', (d) -> chart.bars(d.value))
-                    .attr('height', (d) -> chart.h - chart.bars(d.value))
-                    .attr('width', chart.categories.rangeBand())
+                merge: () -> chart.updateBar(@)
 
         @on 'change:width', (w) -> chart.rescale()
         @on 'change:height', (h) -> chart.rescale()
@@ -44,17 +40,23 @@ d3.chart('RtBaseChart').extend 'RtBarChart',
     barLength: () -> @h
     categoriesLength: () -> @w
 
+    updateBar: (bar) ->
+        bar.attr('x', (d, i) => @categories(i))
+        .attr('y', (d) => @bars(d.value))
+        .attr('height', (d) => @h - @bars(d.value))
+        .attr('width', @categories.rangeBand())
+
 d3.chart('RtBarChart').extend 'RtHorizontalBarChart',
     initialize: () ->
         chart = @
 
         @base.classed 'rt-horizontal-bar-chart', true
 
-        @layer('bars'). on 'merge', () ->
-            @attr('x', 0)
-            .attr('y', (d, i) -> chart.categories(i))
-            .attr('height', chart.categories.rangeBand())
-            .attr('width', (d) -> chart.w - chart.bars(d.value))
-
     barLength: () -> @w
     categoriesLength: () -> @h
+
+    updateBar: (bar) ->
+        bar.attr('x', 0)
+        .attr('y', (d, i) => @categories(i))
+        .attr('height', @categories.rangeBand())
+        .attr('width', (d) => @w - @bars(d.value))

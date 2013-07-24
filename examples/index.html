@@ -5,6 +5,8 @@
         <script src="../bower_components/d3/d3.js"></script>
         <script src="../bower_components/d3.chart/d3.chart.js"></script>
         <script src="../dist/base.js"></script>
+        <script src="../dist/container.js"></script>
+        <script src="../dist/axis.js"></script>
         <script src="../dist/bar.js"></script>
 
         <style type="text/css">
@@ -35,27 +37,36 @@
 
             var chart1 = d3.select('#vis1')
                 .append('svg')
-                .attr('width', 250)
-                .attr('height', 250)
+                .attr('width', 50)
+                .attr('height', 50)
                 .chart('RtBarChart')
             chart1.draw(data);
 
             var chart2 = d3.select('#vis2')
                 .append('svg')
-                .attr('width', 250)
-                .attr('height', 250)
+                .attr('width', 50)
+                .attr('height', 50)
                 .chart('RtHorizontalBarChart')
             chart2.draw(data);
 
+            var chart3 = d3.select('#vis3')
+                .append('svg')
+                .attr('width', 250)
+                .attr('height', 250)
+                .chart('RtAxisChart')
+            chart3.draw(data);
+
             window.charts = {
                 chart1: chart1,
-                chart2: chart2
+                chart2: chart2,
+                chart3: chart3
             };
 
             var phase = 0;
             setInterval(function () {
-                chart1.width(250+phase).height(250+phase);
-                chart2.width(250+phase).height(250+phase);
+                //chart1.width(250+phase).height(250+phase);
+                //chart2.width(250+phase).height(250+phase);
+                //chart3.width(250+phase).height(250+phase);
                 phase = (phase + 1) % 100;
             }, 20);
         </script>
