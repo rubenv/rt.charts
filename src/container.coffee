@@ -23,7 +23,7 @@ d3.chart('RtBaseChart').extend 'RtContainerChart',
 
         @areas.push(area)
 
-        return area.element
+        return area.chart
 
     reposition: (area) ->
         base =

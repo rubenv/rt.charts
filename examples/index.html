@@ -17,6 +17,13 @@
             .vis > svg {
                 border: 1px solid #CCCCCC;
             }
+
+            .rt-axis-chart line,
+            .rt-axis-chart path {
+              fill: none;
+              stroke: #000;
+              shape-rendering: crispEdges;
+            }
         </style>
     </head>
     <body>
@@ -53,7 +60,7 @@
                 .append('svg')
                 .attr('width', 250)
                 .attr('height', 250)
-                .chart('RtAxisChart')
+                .chart('RtBarAxisChart')
             chart3.draw(data);
 
             window.charts = {
@@ -64,10 +71,11 @@
 
             var phase = 0;
             setInterval(function () {
-                //chart1.width(250+phase).height(250+phase);
-                //chart2.width(250+phase).height(250+phase);
-                //chart3.width(250+phase).height(250+phase);
-                phase = (phase + 1) % 100;
+                inc = Math.abs(Math.sin(phase / 50)) * 250
+                //chart1.width(250+inc).height(250+inc);
+                //chart2.width(250+inc).height(250+inc);
+                chart3.width(250+inc).height(250+inc);
+                phase++
             }, 20);
         </script>
     </body>

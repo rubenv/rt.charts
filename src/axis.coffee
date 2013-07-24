@@ -1,12 +1,50 @@
-d3.chart('RtContainerChart').extend 'RtAxisChart',
+d3.chart('RtBaseChart').extend 'RtAxisChart',
     initialize: () ->
         chart = @
 
         @base.classed 'rt-axis-chart', true
+        @on 'change:width', (w) => @draw()
+        @on 'change:height', (h) => @draw()
 
-        chart1 = @addChart 'RtBarChart',
-            w: (c) -> c.w / 2
+    draw: () ->
+        return if !@scale()
+        if !@axis
+            @axis = d3.svg.axis()
+                .scale(@scale())
+                .orient(@orient() || 'left')
+                .ticks(@ticks() || 5)
 
-        chart2 = @addChart 'RtHorizontalBarChart',
-            y: (c) -> c.h / 2
-            h: (c) -> c.h / 4
+        @base.call(@axis)
+
+    scale: d3.chart('RtAbstractChart').getterSetter('scale')
+    orient: d3.chart('RtAbstractChart').getterSetter('orient')
+    ticks: d3.chart('RtAbstractChart').getterSetter('ticks')
+
+d3.chart('RtContainerChart').extend 'RtBarAxisChart',
+    initialize: () ->
+        @base.classed 'rt-bar-axis-chart', true
+
+        axisMargin = 30
+        vPadding = 10
+
+        barChart = @addChart 'RtBarChart',
+            x: (c) -> axisMargin
+            y: vPadding
+            w: (c) -> c.w - axisMargin
+            h: (c) -> c.h - 2 * vPadding
+
+        @addChart 'RtHorizontalBarChart',
+            x: (c) -> axisMargin
+            y: vPadding
+            w: (c) -> (c.w - axisMargin) / 2
+            h: (c) -> (c.h - 2 * vPadding) / 2
+
+        axisChart = @addChart 'RtAxisChart',
+            y: vPadding
+            x: axisMargin
+            w: axisMargin
+            h: (c) -> c.h - 2 * vPadding
+
+        axisChart.scale(barChart.bars)
+            .orient('left')
+            .ticks(6)

@@ -41,7 +41,7 @@ d3.chart('RtBaseChart').extend('RtContainerChart', {
     this.reposition(area);
     area.element.style("fill", "hsl(" + (Math.random() * 360) + ",100%,50%)");
     this.areas.push(area);
-    return area.element;
+    return area.chart;
   },
   reposition: function(area) {
     var base, geom;
