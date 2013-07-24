@@ -5,18 +5,18 @@ d3.chart('RtBaseChart').extend 'RtBarChart',
         @w = @base.attr('width')
         @h = @base.attr('height')
 
-        @x = d3.scale.ordinal().rangeRoundBands([0, @w], .1)
-        @y = d3.scale.linear().range([@h, 0])
+        @categories = d3.scale.ordinal().rangeRoundBands([0, @categoriesLength()], .1)
+        @bars = d3.scale.linear().range([@barLength(), 0])
 
         @base.classed 'rt-bar-chart', true
 
         @layer 'bars', @base,
             dataBind: (data) ->
                 chart.data = data
-                chart.x.domain(data.map((d) -> d.name))
+                chart.categories.domain(data.map((d) -> d.name))
 
                 max = d3.max(data, (d) -> d.value)
-                chart.y.domain([0, max])
+                chart.bars.domain([0, max])
 
                 return @selectAll('rect').data(data)
 
@@ -26,10 +26,35 @@ d3.chart('RtBaseChart').extend 'RtBarChart',
 
             events:
                 merge: () ->
-                    @attr('x', (d, i) -> chart.x(i))
-                    .attr('y', (d) -> chart.y(d.value))
-                    .attr('height', (d) -> chart.h - chart.y(d.value))
-                    .attr('width', chart.x.rangeBand())
+                    @attr('x', (d, i) -> chart.categories(i))
+                    .attr('y', (d) -> chart.bars(d.value))
+                    .attr('height', (d) -> chart.h - chart.bars(d.value))
+                    .attr('width', chart.categories.rangeBand())
 
-        @on 'change:width', (w) -> chart.x.rangeRoundBands([0, w], .1)
-        @on 'change:height', (h) -> chart.y.range([h, 0])
+        @on 'change:width', (w) -> chart.rescale()
+        @on 'change:height', (h) -> chart.rescale()
+
+    rescale: () ->
+        @w = @base.attr('width')
+        @h = @base.attr('height')
+
+        @categories.rangeRoundBands([0, @categoriesLength()], .1)
+        @bars.range([@barLength(), 0])
+
+    barLength: () -> @h
+    categoriesLength: () -> @w
+
+d3.chart('RtBarChart').extend 'RtHorizontalBarChart',
+    initialize: () ->
+        chart = @
+
+        @base.classed 'rt-horizontal-bar-chart', true
+
+        @layer('bars'). on 'merge', () ->
+            @attr('x', 0)
+            .attr('y', (d, i) -> chart.categories(i))
+            .attr('height', chart.categories.rangeBand())
+            .attr('width', (d) -> chart.w - chart.bars(d.value))
+
+    barLength: () -> @w
+    categoriesLength: () -> @h

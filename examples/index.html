@@ -6,26 +6,58 @@
         <script src="../bower_components/d3.chart/d3.chart.js"></script>
         <script src="../dist/base.js"></script>
         <script src="../dist/bar.js"></script>
+
+        <style type="text/css">
+            .vis {
+                display: inline-block;
+            }
+
+            .vis > svg {
+                border: 1px solid #CCCCCC;
+            }
+        </style>
     </head>
     <body>
-        <div id="vis"></div>
+        <div id="vis1" class="vis"></div>
+        <div id="vis2" class="vis"></div>
+        <div id="vis3" class="vis"></div>
+        <div id="vis4" class="vis"></div>
 
 
         <script>
-            var chart = d3.select('#vis')
-                .append('svg')
-                .attr('width', 500)
-                .attr('height', 500)
-                .chart('RtBarChart')
-
-            chart.draw([
+            var data = [
                 { name: 'One', value: 1 },
                 { name: 'Two', value: 2 },
-                { name: 'Three', value: 4 },
+                { name: 'Three', value: 6 },
                 { name: 'Four', value: 8 },
-            ]);
+                { name: 'Five', value: 16 },
+            ]; 
 
-            window.chart = chart;
+            var chart1 = d3.select('#vis1')
+                .append('svg')
+                .attr('width', 250)
+                .attr('height', 250)
+                .chart('RtBarChart')
+            chart1.draw(data);
+
+            var chart2 = d3.select('#vis2')
+                .append('svg')
+                .attr('width', 250)
+                .attr('height', 250)
+                .chart('RtHorizontalBarChart')
+            chart2.draw(data);
+
+            window.charts = {
+                chart1: chart1,
+                chart2: chart2
+            };
+
+            var phase = 0;
+            setInterval(function () {
+                chart1.width(250+phase).height(250+phase);
+                chart2.width(250+phase).height(250+phase);
+                phase = (phase + 1) % 100;
+            }, 20);
         </script>
     </body>
 </html>
