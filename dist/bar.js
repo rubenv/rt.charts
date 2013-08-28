@@ -12,7 +12,7 @@ d3.chart('RtBaseChart').extend('RtBarChart', {
         var max;
         chart.data = data;
         chart.categories.domain(data.map(function(d) {
-          return d.name;
+          return d.key;
         }));
         max = d3.max(data, function(d) {
           return d.value;

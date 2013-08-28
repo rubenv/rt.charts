@@ -13,7 +13,7 @@ d3.chart('RtBaseChart').extend 'RtBarChart',
         @layer 'bars', @base,
             dataBind: (data) ->
                 chart.data = data
-                chart.categories.domain(data.map((d) -> d.name))
+                chart.categories.domain(data.map((d) -> d.key))
 
                 max = d3.max(data, (d) -> d.value)
                 chart.bars.domain([0, max])

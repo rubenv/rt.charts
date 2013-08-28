@@ -11,7 +11,7 @@ module.exports = (grunt) ->
     config =
         out: 'dist'
         src: 'src'
-        previewPort: 9000
+        previewPort: 9001
 
     @initConfig
         config: config
